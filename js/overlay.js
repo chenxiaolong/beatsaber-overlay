@@ -121,6 +121,17 @@ const OverlayUI = (() => {
         }
     };
 
+    const formatNumber = (n) => {
+        const pattern = /(-?\d+)(\d{3})/;
+        let s = n.toString();
+
+        while (pattern.test(s)) {
+            s = s.replace(pattern, "$1,$2");
+        }
+
+        return s;
+    }
+
     return {
         showOverlay() {
             setVisibility(elems.overlay, true);
@@ -144,7 +155,7 @@ const OverlayUI = (() => {
 
             elems.rank.innerText = data.rank;
             elems.percentage.innerText = `${percentage.toFixed(2)}%`;
-            elems.score.innerText = data.score; // add commas
+            elems.score.innerText = formatNumber(data.score);
             elems.combo.innerText = data.combo;
         },
 
