@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Beat Saber Overlay</title>
+        <link rel="stylesheet" href="css/overlay.css">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div id="overlay" class="hidden">
+            <div id="perf">
+                <div>
+                    <span id="perf-combo" class="perf-text"></span>
+                    <span class="perf-subtext">Combo</span>
+                </div>
+
+                <div>
+                    <span id="perf-percentage" class="perf-text"></span>
+                    <span id="perf-rank" class="perf-subtext"></span>
+                </div>
+
+                <div>
+                    <span id="perf-score" class="perf-text">0</span>
+                    <span class="perf-subtext">Score</span>
+                </div>
+            </div>
+
+            <div id="song-info">
+                <div id="song-square">
+                    <img id="song-image">
+
+                    <svg viewBox="0 0 100 100">
+                        <g id="progress-circles">
+                            <circle id='progress-full' cx="50" cy="50" r="45"></circle>
+                            <circle id='progress-elapsed' cx="50" cy="50" r="45"></circle>
+                        </g>
+                    </svg>
+
+                    <div>
+                        <span id="progress-label"></span>
+                    </div>
+                </div>
+
+                <div id="song-details">
+                    <div id="song-title-row" class="song-details-row">
+                        <span id="song-title"></span>
+                        <span id="song-subtitle"></span>
+                    </div>
+
+                    <div id="song-artist-row" class="song-details-row">
+                        <span id="song-artist"></span>
+                        <span id="song-mapper"></span>
+                    </div>
+
+                    <div id="song-tags" class="song-details-row">
+                        <span id="song-difficulty" class="tag-item"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/main.js"></script>
+        <script src="js/handler.js"></script>
+        <script src="js/overlay.js"></script>
+    </body>
+</html>

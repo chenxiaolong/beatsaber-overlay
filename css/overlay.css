@@ -1,0 +1,170 @@
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    color: white;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+#overlay {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+}
+
+/* Song info */
+
+#song-info {
+    display: flex;
+}
+
+#song-info .hidden {
+    display: none;
+}
+
+#song-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 0 8px;
+}
+
+.song-details-row {
+    display: flex;
+    align-items: baseline;
+    margin: 4px 0;
+}
+
+#song-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.0;
+    margin: 0 4px 0 0;
+}
+
+#song-subtitle {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.0;
+}
+
+#song-artist {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.0;
+    margin: 0 4px 0 0;
+}
+
+#song-mapper {
+    font-size: 10px;
+    line-height: 1.0;
+    font-weight: 400;
+}
+
+.tag-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 6px 0 6px;
+    margin: 3px 4px 0 0;
+    border-radius: 10px;
+    color: black;
+    background: white;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+/* Cover image and progress */
+
+#song-square {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    width: 90px;
+    height: 90px;
+}
+
+#song-image {
+    width: 100%;
+    height: 100%;
+    filter: brightness(50%);
+}
+
+#song-square svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#song-square div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#progress-circles {
+    fill: none;
+    stroke: none;
+}
+
+#progress-full {
+    opacity: 0.3;
+    stroke: currentColor;
+    stroke-width: 3px;
+}
+
+#progress-elapsed {
+    fill-rule: nonzero;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 6px;
+    transform: rotate(270deg);
+    transform-origin: center;
+}
+
+#progress-label {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Performance */
+
+#perf {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 8px 0;
+}
+
+.perf-text {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.0;
+}
+
+.perf-subtext {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.0;
+    opacity: 0.75;
+}
+
+/* Animations */
+
+#overlay {
+    transition: opacity 500ms;
+}
+
+#overlay.hidden {
+    opacity: 0;
+    transition: opacity 500ms;
+}
