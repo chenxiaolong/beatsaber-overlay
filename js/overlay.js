@@ -130,6 +130,11 @@ const OverlayUI = (() => {
             setVisibility(elems.overlay, false);
         },
 
+        setScaleFactor(factor) {
+            elems.overlay.style.transformOrigin = 'bottom left';
+            elems.overlay.style.transform = `scale(${factor})`;
+        },
+
         updatePerformance(data) {
             let percentage = 0;
 

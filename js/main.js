@@ -13,16 +13,12 @@ window.addEventListener('load', () => {
                 sourceOptions.address = value;
                 break;
             case 'scaleFactor':
-                const overlay = document.getElementById('overlay');
-
-                const scaleFactor = Number(value);
+                let scaleFactor = Number(value);
                 if (Number.isNaN(scaleFactor) || scaleFactor < 0) {
                     scaleFactor = 1.0;
                 }
 
-                overlay.style.transformOrigin = 'bottom left';
-                overlay.style.transform = `scale(${scaleFactor})`;
-
+                OverlayUI.setScaleFactor(scaleFactor);
                 break;
             case 'debug':
                 console.log("[Debug] Making background black");
