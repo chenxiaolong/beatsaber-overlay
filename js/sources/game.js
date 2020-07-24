@@ -1,5 +1,5 @@
-function connectToSource(address) {
-    const socket = new WebSocket(`ws://${address}/socket`);
+function startSource(options) {
+    const socket = new WebSocket(`ws://${options.address}/socket`);
 
     socket.addEventListener('open', (event) => {
         console.log('[WS] Connection opened');
@@ -10,7 +10,7 @@ function connectToSource(address) {
         OverlayUI.hideOverlay();
 
         console.log('[WS] Attempting reconnect in 5 seconds');
-        setTimeout(() => connectToSource(address), 5000);
+        setTimeout(() => startSource(options), 5000);
     })
 
     socket.addEventListener('error', (event) => {

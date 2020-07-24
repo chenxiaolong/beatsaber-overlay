@@ -35,6 +35,7 @@ There are a few URI query parameters available to configuring the overlay.
 | `scaleFactor` | Scale factor of the overlay (defaults to `1.0`)                |
 | `debug`       | Make the page background black for testing                     |
 | `mock`        | Process mock events instead of connecting to Beat Saber        |
+| `mockLog`     | Log mock events as they happen                                 |
 
 For example, to use a scale factor of 1.5 and connect to a Beat Saber instance running on another machine (`10.10.10.10:1234`), the URI would be:
 

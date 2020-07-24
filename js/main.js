@@ -1,46 +1,48 @@
 window.addEventListener('load', () => {
-    var address = 'localhost:6557';
-    var source = 'game';
+    let source = 'game';
+    const sourceOptions = {
+        address: 'localhost:6557',
+    };
 
-    function handleQueryParams() {
-        const queryParams = new URLSearchParams(location.search);
+    // Parse query params
+    const queryParams = new URLSearchParams(location.search);
 
-        for (const [key, value] of queryParams) {
-            switch (key) {
-                case 'address':
-                    address = value;
-                    break;
-                case 'scaleFactor':
-                    const overlay = document.getElementById('overlay');
+    for (const [key, value] of queryParams) {
+        switch (key) {
+            case 'address':
+                sourceOptions.address = value;
+                break;
+            case 'scaleFactor':
+                const overlay = document.getElementById('overlay');
 
-                    var scaleFactor = Number(value);
-                    if (Number.isNaN(scaleFactor) || scaleFactor < 0) {
-                        scaleFactor = 1.0;
-                    }
+                const scaleFactor = Number(value);
+                if (Number.isNaN(scaleFactor) || scaleFactor < 0) {
+                    scaleFactor = 1.0;
+                }
 
-                    overlay.style.transformOrigin = 'bottom left';
-                    overlay.style.transform = `scale(${scaleFactor})`;
+                overlay.style.transformOrigin = 'bottom left';
+                overlay.style.transform = `scale(${scaleFactor})`;
 
-                    break;
-                case 'debug':
-                    console.log("[Debug] Making background black");
-                    document.body.style.background = 'black';
-                    break;
-                case 'mock':
-                    source = 'mock';
-                    break;
-                default:
-                    console.error(`Unknown query param: ${key}=${value}`);
-                    break;
-            }
+                break;
+            case 'debug':
+                console.log("[Debug] Making background black");
+                document.body.style.background = 'black';
+                break;
+            case 'mock':
+                source = 'mock';
+                break;
+            case 'mockLog':
+                sourceOptions.mockLog = true;
+                break;
+            default:
+                console.error(`Unknown query param: ${key}=${value}`);
+                break;
         }
     }
-
-    handleQueryParams();
 
     // Load event source
     const elem = document.createElement('script');
     elem.setAttribute('src', `js/sources/${source}.js`);
-    elem.addEventListener('load', () => connectToSource(address));
+    elem.addEventListener('load', () => startSource(sourceOptions));
     document.body.appendChild(elem);
 });

@@ -1,4 +1,4 @@
-function connectToSource(address) {
+function startSource(options) {
     // Load mock events
     const elem = document.createElement('script');
     elem.setAttribute('src', `js/sources/mock_events.js`);
@@ -27,17 +27,23 @@ function connectToSource(address) {
                 }
 
                 const diff = event.time - events[0].time;
-                console.log(`[Mock] Scheduling event [${i}] at ${diff}ms`);
+                if (options.mockLog) {
+                    console.log(`[Mock] Scheduling event [${i}] at ${diff}ms`);
+                }
 
                 // Fire off the event at approximately the right time
                 setTimeout(() => {
-                    console.log(`[Mock] Current event: [${i}] = ${event.event}`);
+                    if (options.mockLog) {
+                        console.log(`[Mock] Current event: [${i}] = ${event.event}`);
+                    }
                     eventHandler(event);
                 }, diff);
             }
 
             setTimeout(() => {
-                console.log('[Mock] Reached last event; Looping again');
+                if (options.mockLog) {
+                    console.log('[Mock] Reached last event; Looping again');
+                }
                 playEvents();
             }, events[events.length - 1].time - events[0].time + 1000);
         }
