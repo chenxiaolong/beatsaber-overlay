@@ -64,6 +64,11 @@ body {
     font-weight: 400;
 }
 
+#song-tags {
+    display: flex;
+    align-items: baseline;
+}
+
 .tag-item {
     display: inline-flex;
     align-items: center;
