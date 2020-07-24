@@ -1,3 +1,36 @@
+// https://stackoverflow.com/a/57888548
+const fetchTimeout = (url, ms, { signal, ...options } = {}) => {
+    if (!ms || ms < 0) {
+        return fetch(url, { signal, ...options });
+    }
+
+    const controller = new AbortController();
+    const promise = fetch(url, { signal: controller.signal, ...options });
+
+    if (signal) {
+        signal.addEventListener('abort', () => controller.abort());
+    }
+
+    const timeout = setTimeout(() => controller.abort(), ms);
+    return promise.finally(() => clearTimeout(timeout));
+};
+
+const getBsrFromHash = async (hash, signal, timeout) => {
+    const url = `https://beatsaver.com/api/maps/by-hash/${hash}`;
+    const options = {signal, cache: 'force-cache'};
+    const response = await fetchTimeout(url, timeout, options);
+    if (!response.ok) {
+        throw new Error(`BeatSaver API returned HTTP ${response.status} when searching for hash ${hash}`);
+    }
+
+    const data = await response.json();
+    return data.key;
+};
+
+let lastHash = null;
+const bsrController = new AbortController();
+bsrController.signal.addEventListener('abort', () => lastHash = null);
+
 const eventHandler = (event) => {
     // If we have information about the current map, then we must be in-game
     if (event.status.beatmap) {
@@ -17,6 +50,20 @@ const eventHandler = (event) => {
         } else {
             ProgressUI.startTimer();
         }
+
+        // Query for bsr code
+        if (lastHash != event.status.beatmap.songHash) {
+            lastHash = event.status.beatmap.songHash;
+
+            OverlayUI.updateBsrId(null);
+
+            getBsrFromHash(event.status.beatmap.songHash, bsrController.signal, 5000)
+                .then((bsrId) => {
+                    console.log(`[Handler] BSR ID for ${event.status.beatmap.songHash} is ${bsrId}`);
+                    OverlayUI.updateBsrId(bsrId);
+                })
+                .catch((error) => console.error(`[Handler] Error when querying BeatSaver:`, error));
+        }
     }
     if (event.status.performance) {
         OverlayUI.updatePerformance(event.status.performance);
@@ -33,6 +80,7 @@ const eventHandler = (event) => {
             }
             break;
         case 'menu':
+            bsrController.abort();
             OverlayUI.hideOverlay();
             ProgressUI.stopTimer();
             ProgressUI.resetTimer();

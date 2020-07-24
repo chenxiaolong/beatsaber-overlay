@@ -100,6 +100,7 @@ const OverlayUI = (() => {
         difficulty: document.getElementById('song-difficulty'),
         tags: document.getElementById('song-tags'),
         tagItems: {},
+        bsrId: document.getElementById('song-bsr-id'),
     };
 
     // Create elements for all tags
@@ -186,6 +187,11 @@ const OverlayUI = (() => {
             // Player settings:
             setVisibility(elems.tagItems.LH, settings.leftHanded);
             setVisibility(elems.tagItems.SL, settings.staticLights);
+        },
+
+        updateBsrId(bsrId) {
+            setVisibility(elems.bsrId, !!bsrId);
+            elems.bsrId.innerText = `BSR: ${bsrId}`;
         },
     };
 })();

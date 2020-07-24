@@ -20,10 +20,6 @@ body {
     display: flex;
 }
 
-#song-info .hidden {
-    display: none;
-}
-
 #song-details {
     display: flex;
     flex-direction: column;
@@ -67,6 +63,10 @@ body {
 #song-tags {
     display: flex;
     align-items: baseline;
+}
+
+#song-tags .hidden {
+    display: none;
 }
 
 .tag-item {
@@ -172,4 +172,14 @@ body {
 #overlay.hidden {
     opacity: 0;
     transition: opacity 500ms;
+}
+
+#song-bsr-id {
+    display: block;
+    transition: all 500ms;
+}
+
+#song-bsr-id.hidden {
+    opacity: 0;
+    transition: all 500ms;
 }
