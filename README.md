@@ -42,6 +42,20 @@ For example, to use a scale factor of 1.5 and connect to a Beat Saber instance r
 file:///C:/.../beatsaber-overlay/index.html?scaleFactor=1.5&address=10.10.10.10:1234
 ```
 
+## Debugging
+
+To debug the overlay, open `index.html?debug&mock` in a browser. It will display a black background for visibility and use `js\sources\mock_events.js` as the source of events instead of a real websocket connection. The mock event source will automatically apply a proper offset to all the timestamps in the dump so that they appear to happen in real-time.
+
+A new event dump can be created with the included `websocket-dump.py` python script.
+
+```powershell
+python -m venv venv
+. venv\Scripts\activate.ps1
+pip install -r requirements.txt
+python websocket-dump.py -o js\sources\mock_events.js
+# Play the game and then ^C out of the script
+```
+
 ## Credits
 
 Inspired by [Reselim/beat-saber-overlay](https://github.com/Reselim/beat-saber-overlay).
