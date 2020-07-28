@@ -17,8 +17,8 @@ const ProgressUI = (() => {
             return;
         }
 
-        const elapsed = Math.max(0, timeCurrent - timeInitial);
-        const ratio = Math.min(1, timeDuration === 0 ? 0 : elapsed / timeDuration);
+        const elapsed = Math.min(Math.max(0, timeCurrent - timeInitial), timeDuration);
+        const ratio = timeDuration === 0 ? 0 : elapsed / timeDuration;
         const elapsedSeconds = Math.floor(elapsed / 1000);
         const seconds = elapsedSeconds % 60;
         const minutes = (elapsedSeconds - seconds) / 60;
