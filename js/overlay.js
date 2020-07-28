@@ -89,6 +89,7 @@ const OverlayUI = (() => {
         percentage: document.getElementById('perf-percentage'),
         score: document.getElementById('perf-score'),
         combo: document.getElementById('perf-combo'),
+        comboFull: document.getElementById('perf-combo-full'),
         // Beatmap container
         image: document.getElementById('song-image'),
         titleRow: document.getElementById('song-title-row'),
@@ -157,6 +158,7 @@ const OverlayUI = (() => {
             elems.percentage.innerText = `${percentage.toFixed(2)}%`;
             elems.score.innerText = formatNumber(data.score);
             elems.combo.innerText = data.combo;
+            setVisibility(elems.comboFull, data.combo === data.hitNotes);
         },
 
         updateBeatmap(data) {

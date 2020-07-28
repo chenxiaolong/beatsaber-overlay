@@ -163,6 +163,10 @@ body {
     opacity: 0.75;
 }
 
+#perf-combo-full.hidden {
+    display: none;
+}
+
 /* Animations */
 
 #overlay {
