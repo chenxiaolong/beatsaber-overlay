@@ -40,6 +40,13 @@ const eventHandler = (event) => {
         // (if paused), and song duration. If the game is not paused, the pause
         // field is null. When the resume event is fired, the start field is
         // updated appropriately.
+        //
+        // Note that the time displayed in the overlay may not match the time
+        // displayed in game:
+        // - When a song starts and the scene changes to GameCore, the startSong
+        //   event is fired off before FadeInOutController is done.
+        // - When unpausing the game, ResumeFromPause.anim completes before the
+        //   resume event is fired off.
         ProgressUI.setProgress(event.status.beatmap.start,
             event.status.beatmap.paused,
             event.status.beatmap.length);
