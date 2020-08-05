@@ -34,6 +34,10 @@ body {
     margin: 4px 0;
 }
 
+.song-details-row > .hidden {
+    display: none;
+}
+
 #song-title {
     font-size: 20px;
     font-weight: 700;
