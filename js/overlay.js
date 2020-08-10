@@ -209,7 +209,7 @@ const OverlayUI = (() => {
 
         updateBsrId(bsrId) {
             setVisibility(elems.bsrId, !!bsrId);
-            elems.bsrId.innerText = `BSR: ${bsrId}`;
+            elems.bsrId.innerText = !!bsrId ? `BSR: ${bsrId}` : '';
         },
     };
 })();
