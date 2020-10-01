@@ -62,6 +62,11 @@ const eventHandler = (event) => {
         if (lastHash != event.status.beatmap.songHash) {
             lastHash = event.status.beatmap.songHash;
 
+            // Clear the BSR ID before showing the overlay so we don't have
+            // to use a callback that fires at the end of hideOverlay's
+            // animation.
+            OverlayUI.updateBsrId(null);
+
             getBsrFromHash(event.status.beatmap.songHash, bsrController.signal, 5000)
                 .then((bsrId) => {
                     console.log(`[Handler] BSR ID for ${event.status.beatmap.songHash} is ${bsrId}`);
@@ -82,12 +87,6 @@ const eventHandler = (event) => {
         case 'songStart':
             // For hello, we might already be in game upon connection
             if (event.status.beatmap && event.status.performance) {
-                // Clear the BSR ID before showing the overlay so we don't have
-                // to use a callback that fires at the end of hideOverlay's
-                // animation.
-                if (lastHash != event.status.beatmap.songHash) {
-                    OverlayUI.updateBsrId(null);
-                }
                 OverlayUI.showOverlay();
             }
             break;
