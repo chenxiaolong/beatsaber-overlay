@@ -19,7 +19,6 @@ const mapEventHandler = (event) => {
             && event.CustomDifficultyLabel != difficulty) {
         difficulty += `: ${event.CustomDifficultyLabel}`
     }
-    // TODO: CSS limit tag length
     tags.push(difficulty);
 
     if (event.PracticeMode) {

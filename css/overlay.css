@@ -86,6 +86,13 @@ body {
     line-height: 1.5;
 }
 
+.tag-item-text {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Cover image and progress */
 
 #song-square {

@@ -123,10 +123,14 @@ const OverlayUI = (() => {
             }
 
             for (const tag of tags) {
-                const elem = document.createElement('span');
-                elem.classList.add('tag-item');
-                elem.textContent = tag;
-                elems.tags.appendChild(elem);
+                const textElem = document.createElement('span');
+                textElem.classList.add('tag-item-text');
+                textElem.textContent = tag;
+
+                const tagElem = document.createElement('span');
+                tagElem.classList.add('tag-item');
+                tagElem.appendChild(textElem);
+                elems.tags.appendChild(tagElem);
             }
         },
     };
