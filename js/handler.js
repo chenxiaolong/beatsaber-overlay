@@ -1,6 +1,11 @@
 let resetProgress = true;
 
 const mapEventHandler = (event) => {
+    // Ignore initial startup event
+    if (!event.Modifiers) {
+        return;
+    }
+
     OverlayUI.updateTitle(event.SongName, event.SongSubName);
     OverlayUI.updateAuthor(event.SongAuthor, event.Mapper);
     OverlayUI.updateImage(event.coverImage);
