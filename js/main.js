@@ -1,7 +1,7 @@
 window.addEventListener('load', () => {
     let source = 'game';
     const sourceOptions = {
-        address: 'localhost:6557',
+        address: 'localhost:2946',
     };
 
     // Parse query params

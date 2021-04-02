@@ -6,76 +6,29 @@ const ProgressUI = (() => {
 
     const circleRadius = elems.elapsedRing.getAttribute('r');
     const maxDashArray = 2 * Math.PI * circleRadius;
-    let timeInitial = 0;
     let timeCurrent = 0;
-    let timeLast = null;
     let timeDuration = 0;
-    let loopActive = false;
 
     const render = () => {
-        if (timeCurrent === timeLast) {
-            return;
-        }
-
-        const elapsed = Math.min(Math.max(0, timeCurrent - timeInitial), timeDuration);
+        const elapsed = Math.min(Math.max(0, timeCurrent), timeDuration);
         const ratio = timeDuration === 0 ? 0 : elapsed / timeDuration;
-        const elapsedSeconds = Math.floor(elapsed / 1000);
-        const seconds = elapsedSeconds % 60;
-        const minutes = (elapsedSeconds - seconds) / 60;
+        const seconds = elapsed % 60;
+        const minutes = (elapsed - seconds) / 60;
 
         elems.elapsedRing.setAttribute("stroke-dasharray",
             `${ratio * maxDashArray} ${maxDashArray}`);
-        elems.label.innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-        timeLast = timeCurrent;
+        elems.label.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     };
-
-    const animationLoop = () => {
-        if (loopActive) {
-            timeCurrent = Date.now();
-            render();
-
-            requestAnimationFrame(animationLoop);
-        }
-    };
-
-    render();
 
     return {
-        setProgress(initial, current, duration) {
-            if (initial !== null) {
-                timeInitial = initial;
-            }
-
-            timeCurrent = current === null ? Date.now() : current;
+        updateProgress(current, duration) {
+            timeCurrent = current;
 
             if (duration !== null) {
                 timeDuration = duration;
             }
 
             render();
-        },
-
-        startTimer() {
-            if (!loopActive) {
-                loopActive = true;
-                animationLoop();
-            }
-        },
-
-        stopTimer() {
-            loopActive = false;
-        },
-
-        resetTimer() {
-            if (loopActive) {
-                console.error('[Timer] Reset while timer is active')
-            }
-
-            timeInitial = 0;
-            timeCurrent = 0;
-            timeLast = null;
-            timeDuration = 0;
         },
     };
 })();
@@ -98,21 +51,8 @@ const OverlayUI = (() => {
         artistRow: document.getElementById('song-artist-row'),
         artist: document.getElementById('song-artist'),
         mapper: document.getElementById('song-mapper'),
-        difficulty: document.getElementById('song-difficulty'),
         tags: document.getElementById('song-tags'),
-        tagItems: {},
-        bsrId: document.getElementById('song-bsr-id'),
     };
-
-    // Create elements for all tags
-    const validTags = ['BE', 'DA', 'FS', 'GN', 'IF', 'LH', 'NA', 'NB', 'NF', 'NO', 'SL', 'SS'];
-    for (tag of validTags) {
-        const elem = document.createElement('span');
-        elem.classList.add('tag-item');
-        elem.innerText = tag;
-        elems.tags.appendChild(elem);
-        elems.tagItems[tag] = elem;
-    }
 
     const setVisibility = (elem, visible) => {
         if (visible) {
@@ -147,69 +87,47 @@ const OverlayUI = (() => {
             elems.overlay.style.transform = `scale(${factor})`;
         },
 
-        updatePerformance(data) {
-            let percentage = 0;
+        updatePerformance(accuracy, score, rank, combo, full_combo) {
+            elems.rank.textContent = rank;
+            elems.percentage.textContent = `${accuracy.toFixed(2)}%`;
+            elems.score.textContent = formatNumber(score);
+            elems.combo.textContent = combo;
+            setVisibility(elems.comboFull, full_combo);
+        },
 
-            if (data.currentMaxScore > 0) {
-                percentage = data.score / data.currentMaxScore * 100;
+        updateTitle(title, subtitle) {
+            setVisibility(elems.titleRow, !!title || !!subtitle);
+            setVisibility(elems.title, !!title);
+            elems.title.textContent = title;
+            setVisibility(elems.subtitle, !!subtitle);
+            elems.subtitle.textContent = subtitle;
+        },
+
+        updateAuthor(artist, mapper) {
+            setVisibility(elems.artistRow, !!artist || !!mapper);
+            setVisibility(elems.artist, !!artist);
+            elems.artist.textContent = artist;
+            setVisibility(elems.mapper, !!mapper);
+            elems.mapper.textContent = `[${mapper}]`;
+        },
+
+        updateImage(source) {
+            elems.image.setAttribute('src', source);
+        },
+
+        updateTags(tags) {
+            // OBS currently uses CEF version 75.1.16+g16a67c4+chromium-75.0.3770.100,
+            // which does not support ParentNode.replaceChildren()
+            while (elems.tags.lastChild) {
+                elems.tags.removeChild(elems.tags.lastChild);
             }
 
-            elems.rank.innerText = data.rank;
-            elems.percentage.innerText = `${percentage.toFixed(2)}%`;
-            elems.score.innerText = formatNumber(data.score);
-            elems.combo.innerText = data.combo;
-            setVisibility(elems.comboFull, data.combo === data.hitNotes);
-        },
-
-        updateBeatmap(data) {
-            let difficulty = data.difficulty;
-            if (difficulty === 'ExpertPlus') {
-                difficulty = 'Expert+';
+            for (const tag of tags) {
+                const elem = document.createElement('span');
+                elem.classList.add('tag-item');
+                elem.textContent = tag;
+                elems.tags.appendChild(elem);
             }
-
-            elems.image.setAttribute('src', data.songCover
-                ? `data:image/png;base64,${data.songCover}` : '');
-
-            setVisibility(elems.titleRow, !!data.songName || !!data.songSubName);
-            setVisibility(elems.title, !!data.songName);
-            elems.title.innerText = data.songName;
-            setVisibility(elems.subtitle, !!data.songSubName);
-            elems.subtitle.innerText = data.songSubName;
-
-            setVisibility(elems.artistRow, !!data.songAuthorName || !!data.levelAuthorName);
-            setVisibility(elems.artist, !!data.songAuthorName);
-            elems.artist.innerText = data.songAuthorName;
-            setVisibility(elems.mapper, !!data.levelAuthorName);
-            elems.mapper.innerText = `[${data.levelAuthorName}]`;
-
-            elems.difficulty.innerText = difficulty;
-        },
-
-        updateModifiersAndSettings(mods, settings) {
-            const items = [];
-
-            // Score-impacting modifiers
-            setVisibility(elems.tagItems.DA, mods.disappearingArrows);
-            setVisibility(elems.tagItems.SS, mods.songSpeed === 'Slower');
-            setVisibility(elems.tagItems.FS, mods.songSpeed === 'Faster');
-            setVisibility(elems.tagItems.GN, mods.ghostNotes);
-            setVisibility(elems.tagItems.NA, mods.noArrows);
-            setVisibility(elems.tagItems.NB, mods.noBombs);
-            setVisibility(elems.tagItems.NF, mods.noFail);
-            setVisibility(elems.tagItems.NO, !mods.obstacles);
-
-            // Non-score-impacting modifiers:
-            setVisibility(elems.tagItems.BE, mods.batteryEnergy);
-            setVisibility(elems.tagItems.IF, mods.instaFail);
-
-            // Player settings:
-            setVisibility(elems.tagItems.LH, settings.leftHanded);
-            setVisibility(elems.tagItems.SL, settings.staticLights);
-        },
-
-        updateBsrId(bsrId) {
-            setVisibility(elems.bsrId, !!bsrId);
-            elems.bsrId.innerText = !!bsrId ? `BSR: ${bsrId}` : '';
         },
     };
 })();

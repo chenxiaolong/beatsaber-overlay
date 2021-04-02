@@ -8,36 +8,29 @@ function startSource(options) {
         }
 
         const playEvents = () => {
-            // Easiest deep copy
-            const events = JSON.parse(JSON.stringify(mockEvents));
-
-            // Compute offset for all timestamps
-            const offset = Date.now() - events[0].time;
-
-            for (const [i, event] of events.entries()) {
-                // Apply offsets to all timestamps
-                event.time += offset;
-
-                if (event.status.beatmap) {
-                    event.status.beatmap.start += offset;
-
-                    if (event.status.beatmap.paused) {
-                        event.status.beatmap.paused += offset;
-                    }
-                }
-
-                const diff = event.time - events[0].time;
+            for (const [i, event] of mockEvents.entries()) {
                 if (options.mockLog) {
-                    console.log(`[Mock] Scheduling event [${i}] at ${diff}ms`);
+                    console.log(`[Mock] Scheduling event [${i}] at ${event.time}ms`);
                 }
 
                 // Fire off the event at approximately the right time
                 setTimeout(() => {
                     if (options.mockLog) {
-                        console.log(`[Mock] Current event: [${i}] = ${event.event}`);
+                        console.log(`[Mock] Current event: [${i}] = `, event.data);
                     }
-                    eventHandler(event);
-                }, diff);
+
+                    switch (event.endpoint) {
+                        case 'MapData':
+                            mapEventHandler(event.data);
+                            break;
+                        case 'LiveData':
+                            liveEventHandler(event.data);
+                            break;
+                        default:
+                            console.error(`Unknown endpoint: ${event.endpoint}`);
+                            break;
+                    }
+                }, event.time);
             }
 
             setTimeout(() => {
@@ -45,7 +38,7 @@ function startSource(options) {
                     console.log('[Mock] Reached last event; Looping again');
                 }
                 playEvents();
-            }, events[events.length - 1].time - events[0].time + 1000);
+            }, mockEvents[mockEvents.length - 1].time + 1000);
         }
 
         playEvents();

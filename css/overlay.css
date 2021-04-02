@@ -137,6 +137,7 @@ body {
     stroke-width: 6px;
     transform: rotate(270deg);
     transform-origin: center;
+    transition: all 500ms;
 }
 
 #progress-label {
@@ -180,14 +181,4 @@ body {
 #overlay.hidden {
     opacity: 0;
     transition: opacity 500ms;
-}
-
-#song-bsr-id {
-    display: block;
-    transition: all 500ms;
-}
-
-#song-bsr-id.hidden {
-    opacity: 0;
-    transition: all 500ms;
 }
