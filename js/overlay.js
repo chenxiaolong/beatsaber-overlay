@@ -9,11 +9,17 @@ const ProgressUI = (() => {
     let timeCurrent = 0;
     let timeDuration = 0;
 
-    const render = () => {
+    const render = (transition) => {
         const elapsed = Math.min(Math.max(0, timeCurrent), timeDuration);
         const ratio = timeDuration === 0 ? 0 : elapsed / timeDuration;
         const seconds = elapsed % 60;
         const minutes = (elapsed - seconds) / 60;
+
+        if (transition) {
+            elems.elapsedRing.classList.add('transition');
+        } else {
+            elems.elapsedRing.classList.remove('transition');
+        }
 
         elems.elapsedRing.setAttribute("stroke-dasharray",
             `${ratio * maxDashArray} ${maxDashArray}`);
@@ -21,14 +27,16 @@ const ProgressUI = (() => {
     };
 
     return {
-        updateProgress(current, duration) {
-            timeCurrent = current;
+        updateProgress(current, duration, transition) {
+            if (current !== null) {
+                timeCurrent = current;
+            }
 
             if (duration !== null) {
                 timeDuration = duration;
             }
 
-            render();
+            render(transition);
         },
     };
 })();

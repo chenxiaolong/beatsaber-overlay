@@ -1,8 +1,16 @@
+let resetProgress = true;
+
 const mapEventHandler = (event) => {
     OverlayUI.updateTitle(event.SongName, event.SongSubName);
     OverlayUI.updateAuthor(event.SongAuthor, event.Mapper);
     OverlayUI.updateImage(event.coverImage);
-    ProgressUI.updateProgress(0, event.Length);
+    // Reset progress to 0 after overlay was hidden
+    let currentTime = null;
+    if (resetProgress) {
+        resetProgress = false;
+        currentTime = 0;
+    }
+    ProgressUI.updateProgress(currentTime, event.Length, false);
 
     const tags = [];
 
@@ -64,15 +72,16 @@ const mapEventHandler = (event) => {
     }
 
     OverlayUI.updateTags(tags);
-};
 
-const liveEventHandler = (event) => {
     if (event.InLevel) {
         OverlayUI.showOverlay();
     } else {
         OverlayUI.hideOverlay();
+        resetProgress = true;
     }
+};
 
+const liveEventHandler = (event) => {
     OverlayUI.updatePerformance(
         event.Accuracy,
         event.ScoreWithMultipliers,
@@ -80,5 +89,5 @@ const liveEventHandler = (event) => {
         event.Combo,
         event.FullCombo,
     );
-    ProgressUI.updateProgress(event.TimeElapsed, null);
+    ProgressUI.updateProgress(event.TimeElapsed, null, true);
 };
