@@ -46,6 +46,8 @@ const OverlayUI = (() => {
         // Entire overlay container
         overlay: document.getElementById('overlay'),
         // Performance container
+        misses: document.getElementById('perf-misses'),
+        missesLabel: document.getElementById('perf-misses-label'),
         rank: document.getElementById('perf-rank'),
         percentage: document.getElementById('perf-percentage'),
         score: document.getElementById('perf-score'),
@@ -95,12 +97,16 @@ const OverlayUI = (() => {
             elems.overlay.style.transform = `scale(${factor})`;
         },
 
-        updatePerformance(accuracy, score, rank, combo, full_combo) {
+        updatePerformance(accuracy, score, rank, combo, full_combo, misses) {
             elems.rank.textContent = rank;
             elems.percentage.textContent = `${accuracy.toFixed(2)}%`;
             elems.score.textContent = formatNumber(score);
             elems.combo.textContent = combo;
             setVisibility(elems.comboFull, full_combo);
+            elems.misses.textContent = misses;
+            elems.missesLabel.textContent = misses == 1 ? 'Miss' : 'Misses';
+            setVisibility(elems.misses, misses > 0);
+            setVisibility(elems.missesLabel, misses > 0);
         },
 
         updateTitle(title, subtitle) {

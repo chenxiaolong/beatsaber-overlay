@@ -93,6 +93,7 @@ const liveEventHandler = (event) => {
         event.Rank,
         event.Combo,
         event.FullCombo,
+        event.Misses,
     );
     ProgressUI.updateProgress(event.TimeElapsed, null, true);
 };

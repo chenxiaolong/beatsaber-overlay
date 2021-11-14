@@ -178,7 +178,7 @@ body {
     opacity: 0.75;
 }
 
-#perf-combo-full.hidden {
+#perf .hidden {
     display: none;
 }
 
