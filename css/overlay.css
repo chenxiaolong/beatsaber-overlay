@@ -109,6 +109,10 @@ body {
     filter: brightness(50%);
 }
 
+#song-image.hidden {
+    display: none;
+}
+
 #song-square svg {
     position: absolute;
     top: 0;

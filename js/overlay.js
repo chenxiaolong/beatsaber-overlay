@@ -126,7 +126,8 @@ const OverlayUI = (() => {
         },
 
         updateImage(source) {
-            elems.image.setAttribute('src', source);
+            setVisibility(elems.image, !!source);
+            elems.image.setAttribute('src', source || '');
         },
 
         updateTags(tags) {
