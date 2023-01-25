@@ -7,10 +7,17 @@ function startSource(options) {
             throw '[Mock] No mock events available';
         }
 
+        // Normalize timestamps to be an offset
+        const timeOffset = mockEvents[0].data.UnixTimestamp;
+
+        for (const event of mockEvents) {
+            event.data.UnixTimestamp -= timeOffset;
+        }
+
         const playEvents = () => {
             for (const [i, event] of mockEvents.entries()) {
                 if (options.mockLog) {
-                    console.log(`[Mock] Scheduling event [${i}] at ${event.time}ms`);
+                    console.log(`[Mock] Scheduling event [${i}] at ${event.data.UnixTimestamp}ms`);
                 }
 
                 // Fire off the event at approximately the right time
@@ -30,7 +37,7 @@ function startSource(options) {
                             console.error(`Unknown endpoint: ${event.endpoint}`);
                             break;
                     }
-                }, event.time);
+                }, event.data.UnixTimestamp);
             }
 
             setTimeout(() => {
@@ -38,7 +45,7 @@ function startSource(options) {
                     console.log('[Mock] Reached last event; Looping again');
                 }
                 playEvents();
-            }, mockEvents[mockEvents.length - 1].time + 1000);
+            }, mockEvents[mockEvents.length - 1].data.UnixTimestamp + 1000);
         }
 
         playEvents();

@@ -2,7 +2,6 @@ import argparse
 import asyncio
 import itertools
 import json
-import time
 import traceback
 import sys
 
@@ -19,7 +18,6 @@ with open(args.output, 'w') as f:
     f.write('const mockEvents = [\n')
 
     try:
-        time_offset = time.monotonic()
         file_lock = asyncio.Lock()
 
         async def dump(endpoint):
@@ -28,14 +26,11 @@ with open(args.output, 'w') as f:
             async with websockets.connect(uri) as websocket:
                 for i in itertools.count():
                     message = await websocket.recv()
-                    # Round to nearest millisecond
-                    event_time = round((time.monotonic() - time_offset) * 1000)
 
                     print(f'[{endpoint}] Received message {i}')
 
                     data = json.loads(message)
                     event = {
-                        'time': event_time,
                         'endpoint': endpoint,
                         'data': data,
                     }

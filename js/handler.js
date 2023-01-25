@@ -8,14 +8,14 @@ const mapEventHandler = (event) => {
 
     OverlayUI.updateTitle(event.SongName, event.SongSubName);
     OverlayUI.updateAuthor(event.SongAuthor, event.Mapper);
-    OverlayUI.updateImage(event.coverImage);
+    OverlayUI.updateImage(event.CoverImage);
     // Reset progress to 0 after overlay was hidden
     let currentTime = null;
     if (resetProgress) {
         resetProgress = false;
         currentTime = 0;
     }
-    ProgressUI.updateProgress(currentTime, event.Length, false);
+    ProgressUI.updateProgress(currentTime, event.Duration, false);
 
     const tags = [];
 
@@ -37,31 +37,31 @@ const mapEventHandler = (event) => {
     if (event.PracticeMode) {
         let text = 'Practice';
         if (event.PracticeModeModifiers
-                && event.PracticeModeModifiers.songSpeedMul) {
-            text += `: ${event.PracticeModeModifiers.songSpeedMul.toFixed(2)}x`
+                && event.PracticeModeModifiers.SongSpeedMul) {
+            text += `: ${event.PracticeModeModifiers.SongSpeedMul.toFixed(2)}x`
         }
         tags.push(text);
     }
 
     const modifiers = {
         // Score-impacting modifiers
-        'DA': event.Modifiers.disappearingArrows,
-        'FS': event.Modifiers.fasterSong,
-        'GN': event.Modifiers.ghostNotes,
-        'NA': event.Modifiers.noArrows,
-        'NB': event.Modifiers.noBombs,
-        'NW': event.Modifiers.noWalls,
-        'SFS': event.Modifiers.superFastSong,
-        'SS': event.Modifiers.slowerSong,
+        'DA': event.Modifiers.DisappearingArrows,
+        'FS': event.Modifiers.FasterSong,
+        'GN': event.Modifiers.GhostNotes,
+        'NA': event.Modifiers.NoArrows,
+        'NB': event.Modifiers.NoBombs,
+        'NW': event.Modifiers.NoWalls,
+        'SFS': event.Modifiers.SuperFastSong,
+        'SS': event.Modifiers.SlowerSong,
         // Sometimes score-impacting modifiers
-        //'NF': event.Modifiers.noFailOn0Energy,
+        //'NF': event.Modifiers.NoFailOn0Energy,
         // Non-score-impacting modifiers
-        '1L': event.Modifiers.oneLife,
-        '4L': event.Modifiers.fourLives,
-        'SA': event.Modifiers.strictAngles,
-        'SN': event.Modifiers.smallNotes,
-        'PM': event.Modifiers.proMode,
-        'ZM': event.Modifiers.zenMode,
+        '1L': event.Modifiers.OneLife,
+        '4L': event.Modifiers.FourLives,
+        'SA': event.Modifiers.StrictAngles,
+        'SN': event.Modifiers.SmallNotes,
+        'PM': event.Modifiers.ProMode,
+        'ZM': event.Modifiers.ZenMode,
         // Player settings (not supported by BSDataPuller yet)
         //'LH': <left handed mode>
         //'SL': <static lights>
